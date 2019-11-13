@@ -1,23 +1,24 @@
 {
-  "name": "gym",
-  "version": "1.0.0",
-  "description": "html version of ABS.",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/bryt-li/gym.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/bryt-li/gym/issues"
-  },
-  "homepage": "https://github.com/bryt-li/gym#readme",
-  "dependencies": {
-    "express": "^4.15.3"
-  }
+    "name": "gym",
+    "version": "1.0.0",
+    "description": "html version of ABS.",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bryt-li/gym.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/bryt-li/gym/issues"
+    },
+    "homepage": "https://github.com/bryt-li/gym#readme",
+    "dependencies": {
+        "express": "^4.15.3",
+        "request": "^2.88.0"
+    }
 }
