@@ -2,11 +2,46 @@ const express = require('express')
 const app = express()
 const fs = require('fs')
 var request = require('request')
+const exec = require('child_process').exec
 
 const APP_KEY = '203756128'
 const APP_SECRET = 'dtjmyh6fxxb3q5b11576fboy00gyec07'
 const APP_CODE = '2c777f9671bb49749d32b72484828fe8'
 const API_URL_PREFIX = 'https://a83774f0c32147a0ace5f5748770682f-cn-hangzhou.alicloudapi.com'
+
+/*
+var rank = [
+    { name: '倔强青铜I', star: 0 },
+    { name: '倔强青铜II', star: 4 },
+    { name: '倔强青铜III', star: 7 },
+    { name: '秩序白银I', star: 10 },
+    { name: '秩序白银II', star: 14 },
+    { name: '秩序白银III', star: 18 },
+    { name: '秩序白银IV', star: 22 },
+    { name: '尊贵黄金I', star: 26 },
+    { name: '尊贵黄金II', star: 30 },
+    { name: '尊贵黄金III', star: 34 },
+    { name: '尊贵黄金IV', star: 38 },
+    { name: '荣耀铂金I', star: 42 },
+    { name: '荣耀铂金II', star: 47 },
+    { name: '荣耀铂金III', star: 52 },
+    { name: '荣耀铂金IV', star: 57 },
+    { name: '荣耀铂金V', star: 62 },
+    { name: '永恒钻石I', star: 67 },
+    { name: '永恒钻石II', star: 72 },
+    { name: '永恒钻石III', star: 77 },
+    { name: '永恒钻石IV', star: 82 },
+    { name: '永恒钻石V', star: 87 },
+    { name: '至尊星耀I', star: 92 },
+    { name: '至尊星耀II', star: 97 },
+    { name: '至尊星耀III', star: 102 },
+    { name: '至尊星耀IV', star: 107 },
+    { name: '至尊星耀V', star: 112 },
+    { name: '最强王者', star: 117 },
+    { name: '荣耀王者', star: 147 },
+]
+
+*/
 
 app.get('/getRankPoint', function(req, res) {
     const options = {
@@ -45,6 +80,24 @@ app.get('/saveRankPoint', function(req, res) {
             console.error(response)
             console.error(body)
         }
+    })
+})
+
+app.get('/play-pause', function(req, res) {
+    exec('cliclick kp:play-pause', function(error, stdout, stderr) {
+        res.sendStatus(200)
+    })
+})
+
+app.get('/play-next', function(req, res) {
+    exec('cliclick -w 333 kd:cmd kp:arrow-left ku:cmd', function(error, stdout, stderr) {
+        res.sendStatus(200)
+    })
+})
+
+app.get('/favor', function(req, res) {
+    exec('cliclick c:223,50', function(error, stdout, stderr) {
+        res.sendStatus(200)
     })
 })
 

@@ -1,6 +1,6 @@
 {
-	"totalSets" : 3,
-	"defaultReady" : 10,
-	"defaultGo" : 70,
-	"defaultRest" : 18
+    "totalSets": 3,
+    "defaultReady": 10,
+    "defaultGo": 75,
+    "defaultRest": 18
 }

@@ -6,18 +6,58 @@ function set_body_height() {
 var timer;
 
 var image;
-var music;
 var labelTitle;
 var labelCount;
 var labelProgress;
 var labelRankPoint;
-
+var isFirstPlay = true;
 var frames = [];
 
 var totalSeconds = 0;
 
 var synth = null;
 var utter = null;
+
+var RANK_TITLE = [
+    { name: '倔强青铜I', star: 1 },
+    { name: '倔强青铜II', star: 4 },
+    { name: '倔强青铜III', star: 7 },
+    { name: '秩序白银I', star: 10 },
+    { name: '秩序白银II', star: 14 },
+    { name: '秩序白银III', star: 18 },
+    { name: '秩序白银IV', star: 22 },
+    { name: '尊贵黄金I', star: 26 },
+    { name: '尊贵黄金II', star: 30 },
+    { name: '尊贵黄金III', star: 34 },
+    { name: '尊贵黄金IV', star: 38 },
+    { name: '荣耀铂金I', star: 42 },
+    { name: '荣耀铂金II', star: 47 },
+    { name: '荣耀铂金III', star: 52 },
+    { name: '荣耀铂金IV', star: 57 },
+    { name: '荣耀铂金V', star: 62 },
+    { name: '永恒钻石I', star: 67 },
+    { name: '永恒钻石II', star: 72 },
+    { name: '永恒钻石III', star: 77 },
+    { name: '永恒钻石IV', star: 82 },
+    { name: '永恒钻石V', star: 87 },
+    { name: '至尊星耀I', star: 92 },
+    { name: '至尊星耀II', star: 97 },
+    { name: '至尊星耀III', star: 102 },
+    { name: '至尊星耀IV', star: 107 },
+    { name: '至尊星耀V', star: 112 },
+    { name: '最强王者', star: 117 },
+    { name: '荣耀王者', star: 147 }
+];
+
+
+function getRankTitle(star){
+    for(var i = RANK_TITLE.length-1; i >= 0; i--){
+        var rank = RANK_TITLE[i];
+        if(star >= rank.star)
+            return { title: rank.name, star: star - rank.star +1 };
+    }
+    return null;
+}
 
 function init() {
     var finished = false;
@@ -33,13 +73,11 @@ function init() {
 		    say: null,
 		    play: false,
 		    stop: false,
-		    loadMusic: false,
 		    finished: false
 		};
 
 		if (second == 0) {
 		    frame.stop = true;
-		    frame.loadMusic = true;
 		    frame.showImage = true;
 		    frame.image = SetName + "/" + Actions[index].image;
 
@@ -70,7 +108,6 @@ function init() {
 		    say: null,
 		    play: false,
 		    stop: false,
-		    loadMusic: false,
 		    finished: false
 		};
 		if (
@@ -107,7 +144,6 @@ function init() {
 		    say: null,
 		    play: false,
 		    stop: false,
-		    loadMusic: false,
 		    finished: false
 		};
 
@@ -134,7 +170,6 @@ function init() {
 	say: null,
 	play: false,
 	stop: false,
-	loadMusic: false,
 	finished: true
     };
     frames.push(frame);
@@ -150,11 +185,19 @@ var progress = 0;
 function timerfunc() {
     progress++;
     frame = frames.shift();
+    console.log(frame);
 
     if (frame.say) say(frame.say);
 
     labelTitle.html(frame.title);
+    
     labelCount.html(frame.countdown.toString());
+
+    /* test only
+    var rankTitle = getRankTitle(100);
+    labelCount.html(rankTitle.title + '<br/>' +  rankTitle.star + " Star");
+    */
+    
     labelProgress.html(((progress / totalSeconds) * 100.0).toFixed(0) + "%");
 
     if (frame.showImage) {
@@ -166,19 +209,19 @@ function timerfunc() {
     }
 
     if (frame.stop) {
-	    music[0].pause();
-    }
-
-    if (frame.loadMusic) {
-	    $.get("/music", function(response) {
-	        music.attr("src", "mp3/" + response);
-	        music[0].load();
+	    $.get("/play-pause", function(response) {
 	    });
     }
 
     if (frame.play) {
-	    music[0].volume = 0.3;
-	    music[0].play();
+        if(isFirstPlay){
+            isFirstPlay = false;
+   	        $.get("/play-pause", function(response) {
+	        });
+        }else{
+	        $.get("/play-next", function(response) {
+	        });
+        }
     }
 
     if (frame.finished) {
@@ -189,6 +232,10 @@ function timerfunc() {
 	        labelRankPoint.html(rankPoint);
     		say("Rank " + result.rank);
             say("Point " + result.point);
+
+            var rankTitle = getRankTitle(result.rank);
+            labelCount.html(rankTitle.title +'<br/>'+ rankTitle.star + " Star");
+            labelProgress.hide();
 	    });
     }
 }
@@ -208,7 +255,6 @@ $(document).ready(function() {
 
     image = $("#image");
     image.hide();
-    music = $("#music");
     labelTitle = $("#labelTitle");
     labelCount = $("#labelCount");
     labelProgress = $("#labelProgress");
@@ -226,7 +272,6 @@ $(document).ready(function() {
 
 	    btn.hide();
 
-	    music.hide();
 	    start();
 	    event.preventDefault();
     });
